@@ -1,0 +1,23 @@
+{
+  "required": {
+    "editor": [
+      "neovim",
+      "helix",
+      "micro"
+    ],
+    "terminal": [
+      "alacritty",
+      "kitty"
+    ],
+    "utilites": [
+      "moreutils",
+      "fzf",
+      "eza",
+      "zoxide",
+      "zsh"
+    ]
+  },
+  "installed": [
+    "bat"
+  ]
+}
