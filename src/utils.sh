@@ -3,6 +3,7 @@
 ROOT_DIR="$(cd -P "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PKG_JSON_FILE=$ROOT_DIR/packages.json
 HOME_PKG_JSON_FILE="${XDG_DATA_HOME:-$HOME}/base/packages.json"
+PERU="pacman"
 
 check_json_file(){
     data='
@@ -70,12 +71,34 @@ simmulate_install(){
         done
     fi
 }
-result=$(simmulate_install pkg1 pkg2 > /dev/null) && echo 0 || echo 1
-echo $result
+# result=$(simmulate_install pkg1 pkg2 > /dev/null) && echo 0 || echo 1
+# echo $result
+
+## get all packages name and return selected pkgs in one string
+get_all_packages(){
+    local PKGS="$($PERU --color=always -Sl \
+    | head -n 5 \
+    | fzf --ansi --multi --sync \
+    | awk '{s = s $1 "/" $2 " "} END {print s}')"
+    echo $PKGS
+}
+
+## get all installed packages name and return selected pkgs in one string
+get_installed_packages() {
+    local PKGS="$($PERU --color=always -Qe \
+    | head -n 5 \
+    | fzf --ansi --multi --sync \
+    | awk '{s = s $1 "/" $2 " "} END {print s}')"
+    echo $PKGS
+}
 
 # install package function
 install_pkg(){
     # check_json_file
     echo "installing packages"
+    # ==> get list of packages
+    # sudo pacman --color=always -Sl | head -n 5 | fzf --ansi --multi --sync | awk '{s = s $1 "/" $2 " "} END {print s}'
+    
+    
 }
-install_pkg
+# install_pkg
