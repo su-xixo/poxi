@@ -86,17 +86,15 @@ get_installed_packages() {
     local PKGS="$($PERU --color=always -Qe \
     | head -n 5 \
     | fzf --ansi --multi --sync \
-    | awk '{s = s $1 "/" $2 " "} END {print s}')"
-    echo $PKGS
+    | awk '{s=s $1 " "} END{print s}')"
+    echo $PKGS  
 }
-
+get_installed_packages
 # install package function
 install_pkg(){
     # check_json_file
     echo "installing packages"
     # ==> get list of packages
-    # sudo pacman --color=always -Sl | head -n 5 | fzf --ansi --multi --sync | awk '{s = s $1 "/" $2 " "} END {print s}'
-    
-    
+
 }
 # install_pkg
