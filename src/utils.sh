@@ -39,7 +39,8 @@ simmulate_install(){
     echo "${packages[@]}"
     # Ask the user if they want to install all packages or install individually
     read -p "Do you want to install all packages without confirmation [Y/N]? " install_all
-    local install_all="${install_all,,}"  # Convert to lowercase
+    local install_all="${install_all:-y}"
+    install_all="${install_all,,}"
 
     if [[ "$install_all" == "y" ]]; then
         echo "Installing all packages..."
