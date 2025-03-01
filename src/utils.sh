@@ -75,7 +75,7 @@ echo $result
 
 # install package function
 install_pkg(){
-    # check_jsoxn_file
+    # check_json_file
     echo "installing packages"
 }
 install_pkg
