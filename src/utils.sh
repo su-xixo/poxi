@@ -27,6 +27,7 @@ check_json_file(){
         echo $result
     fi
 }
+
 # installation simmulation
 simmulate_install(){
     if [ $# -eq 0 ]; then
@@ -72,6 +73,7 @@ simmulate_install(){
     fi
 }
 
+## get package information
 get_package_detail() {
     local PKG=$1
     local Preview="$($PERU --color=always -Si $PKG)"
@@ -95,13 +97,4 @@ get_installed_packages() {
     | awk '{s=s $1 " "} END{print s}')"
     echo $PKGS  
 }
-# get_installed_packages
 
-# install package function
-install_pkg(){
-    # check_json_file
-    echo "installing packages"
-    # ==> get list of packages
-    
-}
-# install_pkg
