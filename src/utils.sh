@@ -36,13 +36,15 @@ simmulate_install(){
     for pkg in "$@"; do
         packages+=("$pkg")
     done
-    echo "${packages[@]}"
     # Ask the user if they want to install all packages or install individually
     read -p "Do you want to install all packages without confirmation [Y/N/X]? " install_all
     local install_all="${install_all:-y}"
     install_all="${install_all,,}"
 
-    [ "$install_all" == "x" ] && exit 1
+    if [ "$install_all" == "x" ]; then
+        echo "Installation cancelled."
+        exit 1
+    fi
 
     if [[ "$install_all" == "y" ]]; then
         echo "Installing all packages..."
@@ -68,13 +70,12 @@ simmulate_install(){
         done
     fi
 }
-result=$(simmulate_install pkg1 pkg2) &
-# simmulate_install pkg1 pkg2
+result=$(simmulate_install pkg1 pkg2 > /dev/null) && echo 0 || echo 1
 echo $result
 
 # install package function
 install_pkg(){
-    check_json_file
+    # check_jsoxn_file
     echo "installing packages"
 }
 install_pkg
