@@ -38,9 +38,11 @@ simmulate_install(){
     done
     echo "${packages[@]}"
     # Ask the user if they want to install all packages or install individually
-    read -p "Do you want to install all packages without confirmation [Y/N]? " install_all
+    read -p "Do you want to install all packages without confirmation [Y/N/X]? " install_all
     local install_all="${install_all:-y}"
     install_all="${install_all,,}"
+
+    [ "$install_all" == "x" ] && exit 1
 
     if [[ "$install_all" == "y" ]]; then
         echo "Installing all packages..."
@@ -61,12 +63,14 @@ simmulate_install(){
             fi
             
             printf "Installing package $pkg...\r"
-            sleep 2
+            sleep 1
             echo "$pkg: Installation Done 󰩐"
         done
     fi
 }
-simmulate_install pkg1
+result=$(simmulate_install pkg1 pkg2) &
+# simmulate_install pkg1 pkg2
+echo $result
 
 # install package function
 install_pkg(){
