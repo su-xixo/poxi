@@ -72,6 +72,12 @@ simmulate_install(){
     fi
 }
 
+get_package_detail() {
+    local PKG=$1
+    local Preview="$($PERU --color=always -Si $PKG)"
+    echo "$Preview"
+}
+
 ## get all packages name and return selected pkgs in one string
 get_all_packages(){
     local PKGS="$($PERU --color=always -Sl \
@@ -89,12 +95,13 @@ get_installed_packages() {
     | awk '{s=s $1 " "} END{print s}')"
     echo $PKGS  
 }
-get_installed_packages
+# get_installed_packages
+
 # install package function
 install_pkg(){
     # check_json_file
     echo "installing packages"
     # ==> get list of packages
-
+    
 }
 # install_pkg
