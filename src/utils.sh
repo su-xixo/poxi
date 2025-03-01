@@ -71,8 +71,6 @@ simmulate_install(){
         done
     fi
 }
-# result=$(simmulate_install pkg1 pkg2 > /dev/null) && echo 0 || echo 1
-# echo $result
 
 ## get all packages name and return selected pkgs in one string
 get_all_packages(){
