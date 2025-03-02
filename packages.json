@@ -1,19 +1,18 @@
 {
   "required": {
     "editor": [
-      "neovim",
       "helix",
       "micro",
-      "micro"
+      "neovim"
     ],
     "terminal": [
       "alacritty",
       "kitty"
     ],
     "utilites": [
-      "moreutils",
-      "fzf",
       "eza",
+      "fzf",
+      "moreutils",
       "zoxide",
       "zsh"
     ]
@@ -21,7 +20,7 @@
   "installed": [
     "bat",
     "batty",
-    "pkg1",
-    "pk1"
+    "pk1",
+    "pkg1"
   ]
 }

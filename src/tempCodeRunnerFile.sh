@@ -22,7 +22,7 @@ a=$(jq -r '.required | to_entries | map(.value) | flatten | unique' $PKG_JSON_FI
 b=($a)
 echo ${#b[@]}
 
-# jq 'walk(if type == "array" then unique else . end)' $PKG_JSON_FILE
+jq 'walk(if type == "array" then unique else . end)' $PKG_JSON_FILE | sponge $PKG_JSON_FILE
 
 
 
