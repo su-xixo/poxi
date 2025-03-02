@@ -21,6 +21,7 @@
   "installed": [
     "bat",
     "batty",
-    "pkg1"
+    "pkg1",
+    "pk1"
   ]
 }
