@@ -30,9 +30,8 @@ check_json_file(){
 
 # installation simmulation
 function simmulate_install {
-    echo "installing packages $@"
     for pkg in $@; do
-        echo "󰦗 installing $pkg..."
+        printf "󰦗 installing $pkg...\n"
         sleep 2&
     done
     wait

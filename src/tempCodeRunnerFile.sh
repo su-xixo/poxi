@@ -1,2 +1,1 @@
-]; then
-    # fi
+simmulate_install $pkgs
