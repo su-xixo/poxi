@@ -1,1 +1,1 @@
-get_installed_packages
+${COLORS['green']}
