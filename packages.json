@@ -22,6 +22,11 @@
     "pkg1",
     "pkg2",
     "pkg3",
-    "pkg4"
+    "pkg4",
+    "endeavouros/ckbcomp",
+    "endeavouros/calamares",
+    "endeavouros/bashdb",
+    "endeavouros/arc-gtk-theme-eos",
+    "endeavouros/akm"
   ]
 }

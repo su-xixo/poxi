@@ -7,7 +7,6 @@ source $UTILS
 function add_to_json {
     local pkg=$1
     local check=$(jq --arg pkg "$pkg" '.installed|any(.==$pkg)' $PKG_JSON_FILE)
-    printf "check is: %s\n" "$check"
     if [ $check == 'false' ]; then
         jq --arg pkg "$pkg" '.installed += [$pkg]' $PKG_JSON_FILE | sponge $PKG_JSON_FILE
     fi
@@ -33,7 +32,6 @@ function log_non_installed {
         )' $file > temp.json && mv temp.json $file
 }
 
-
 install_pkg(){
     local pkgs=($@)
     if [ ${#pkgs[@]} -eq 0 ]; then
@@ -41,21 +39,17 @@ install_pkg(){
     fi
 
     for pkg in ${pkgs[@]}; do
-        # TODO: get oneliner for is_installed
         simmulate_install $pkg && is_installed=$? || is_installed=$?
-        # simmulate_install $pkg
-        # is_installed=$(echo $?)
         if test $is_installed -eq 0; then
             # echo "adding $pkg into json file"
-            # # add_to_json $pkg
-            echo "$pkg not installed"
-            jq --arg pkg "$pkg" '.+={"name": $pkg}' .temp.json | sponge .temp.json
+            add_to_json $pkg
+            
         else
             echo "$pkg not installed"
-            jq --arg pkg "$pkg" '.+={"name": $pkg}' >> .temp.json
+            log_non_installed $pkg
         fi
         
     done
 }
-install_pkg pkg1 pkg2 pkg4
+install_pkg $@
 
