@@ -29,48 +29,14 @@ check_json_file(){
 }
 
 # installation simmulation
-simmulate_install(){
-    if [ $# -eq 0 ]; then
-        echo "No packages specified."
-        return
-    fi 
-    local packages=()
-    for pkg in "$@"; do
-        packages+=("$pkg")
+function simmulate_install {
+    echo "installing packages $@"
+    for pkg in $@; do
+        echo "󰦗 installing $pkg..."
+        sleep 2&
     done
-    # Ask the user if they want to install all packages or install individually
-    read -p "Do you want to install all packages without confirmation [Y/N/X]? " install_all
-    local install_all="${install_all:-y}"
-    install_all="${install_all,,}"
-
-    if [ "$install_all" == "x" ]; then
-        echo "Installation cancelled."
-        exit 1
-    fi
-
-    if [[ "$install_all" == "y" ]]; then
-        echo "Installing all packages..."
-        for pkg in "${packages[@]}"; do
-            printf "Installing package $pkg...\r"
-            sleep 2
-            echo "$pkg: Installation Done 󰩐"
-        done
-    else
-        for pkg in "${packages[@]}"; do
-            read -p "Want to proceed with installing '$pkg' [Y/N]: " confirm
-            local confirm="${confirm:-y}"
-            confirm="${confirm,,}"
-            
-            if [[ "$confirm" == "n" ]]; then
-                printf "󱠡 Skipping package $pkg...\n"
-                continue
-            fi
-            
-            printf "Installing package $pkg...\r"
-            sleep 1
-            echo "$pkg: Installation Done 󰩐"
-        done
-    fi
+    wait
+    echo " installation done"
 }
 
 ## get package information
