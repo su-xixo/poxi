@@ -19,8 +19,9 @@
   },
   "installed": [
     "bat",
-    "batty",
-    "pk1",
-    "pkg1"
+    "pkg1",
+    "pkg2",
+    "pkg3",
+    "pkg4"
   ]
 }
