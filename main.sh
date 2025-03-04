@@ -1,4 +1,5 @@
 #!/bin/bash
+# COMMAND NAME: POXI
 CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SCRIPT_DIR="$CURRENT_DIR/src"
 SCRIPT_NAME="$(basename $0)"
