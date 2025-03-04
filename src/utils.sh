@@ -38,6 +38,16 @@ function simmulate_install {
     echo " installation done"
 }
 
+# remove simmulation
+function simmulate_remove {
+    for pkg in $@; do
+        printf "󰦗 Removing $pkg...\n"
+        sleep 2&
+    done
+    wait
+    echo " Removal done"
+}
+
 ## get package information
 get_package_detail() {
     local PKG=$1

@@ -4,5 +4,11 @@
     "pkg2",
     "pkg3",
     "pkg4"
+  ],
+  "removed": [
+    "alsa-firmware",
+    "alsa-plugins",
+    "alsa-utils",
+    "arc-gtk-theme-eos"
   ]
 }

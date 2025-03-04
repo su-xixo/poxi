@@ -1,1 +1,1 @@
-simmulate_install $pkgs
+get_installed_packages
