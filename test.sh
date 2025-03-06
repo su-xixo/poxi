@@ -5,6 +5,7 @@ INSTALL=$ROOT_DIR/bash/src/install.sh
 UTILS=$ROOT_DIR/bash/src/utils.sh
 source $INSTALL
 source $UTILS
+FILENAME=""
 
 
 install_sim() {
@@ -40,13 +41,16 @@ EOF
 function main {
     # Capture remaining arguments after options are parsed
     local opts
-    local short_options='bah'
-    local long_options='background,accept-all,help'
+    local short_options='bahf:'
+    local long_options='background,accept-all,help,file:'
     if ! opts=$(getopt -o $short_options --long $long_options -n "$0" -- "$@"); then
         echo "Error: Invalid options passed!" >&2
         # usage
     fi
+    echo "$opts"
     eval set -- "$opts"
+    echo "$opts"
+    echo $@
     while true; do
         case "$1" in
             -b|--background)
@@ -58,8 +62,8 @@ function main {
                 shift 1
                 ;;
             -f|--file)
-                FILENAME=true
-                shift 1
+                FILENAME="$2"
+                shift 2
                 ;;
             -h|--help)
                 usage
@@ -74,7 +78,8 @@ function main {
                 ;;
         esac
     done
-    
+    echo $@
+
     # Display configuration
     echo "Runtime configuration:"
     echo "----------------------"
@@ -84,8 +89,18 @@ function main {
     case "$1" in
         install)
             shift 1
-            # install_sim $@
-            install_pkg $@
+            if [[ -n "$FILENAME" ]]; then
+                # mapfile -t installed_packages < <(jq -r '.installed[]' $PKG_JSON_FILE)
+                local installed_packages=()
+                while IFS= read -r pkg; do
+                    installed_packages+=("$pkg")
+                done < <(jq -r '.installed[]' $PKG_JSON_FILE)
+                echo "installed packages: ${installed_packages[@]}"
+                # install_sim "${installed_packages[@]}"
+            else
+                install_sim $@
+            fi
+            # install_pkg $@
             ;;
         remove)
             shift 1
@@ -96,8 +111,8 @@ function main {
             update_sim
             ;;
         *)
-            # install_sim $@
-            install_pkg $@
+            install_sim $@
+            # install_pkg $@
             shift 1
             ;;
     esac
@@ -107,4 +122,5 @@ function main {
 
 # Execute main function
 # main "$@"
-main -ba install pkg1 pkg2 pkg3
+# main -ba install pkg1 pkg2 pkg3
+main -f install
