@@ -81,6 +81,7 @@ function main {
                 ;;
         esac
     done
+    # useless comments below
     # echo $@
 
     # # Display configuration
@@ -89,6 +90,8 @@ function main {
     # echo "background: $BACKGROUND"
     # echo "accept-all: $ACCEPT_ALL"
 
+    #=> removed this implementation because $ main -option -f filename 
+    # without command is handy but this look worthless that why...
     # FIXED: below error
     # echo "$opts"
     # try regex to select only when their is no other 
@@ -105,14 +108,15 @@ function main {
     case "$1" in
         install)
             shift 1
-            if [[ -f "$FILENAME" ]]; then
-                # mapfile -t installed_packages < <(jq -r '.installed[]' $PKG_JSON_FILE)
-                local installed_packages=()
-                while IFS= read -r pkg; do
-                    installed_packages+=("$pkg")
-                done < <(jq -r '.installed[]' $PKG_JSON_FILE)
-                echo "installed packages: ${installed_packages[@]}"
-                # install_sim "${installed_packages[@]}"
+            if [[ -n "$FILENAME" && -f "$FILENAME" ]]; then
+                if [[ "$(jq -r 'has("installed") and (.installed | length != 0)' "$FILENAME")" == 'true' ]]; then
+                    local installed_packages=()
+                    while IFS= read -r pkg; do
+                        installed_packages+=("$pkg")
+                    done < <(jq -r '.installed[]' $FILENAME)
+                    echo "installed packages: ${installed_packages[@]}"
+                    # install_sim "${installed_packages[@]}"
+                fi
             else
                 install_sim $@
             fi
@@ -142,4 +146,5 @@ function main {
 # main -ba install pkg1 pkg2 pkg3
 # main -f install install
 # main -c
+# main -a -f packages.json install
 main -a -f packages.json
