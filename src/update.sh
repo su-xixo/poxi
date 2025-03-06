@@ -19,4 +19,4 @@ update_pkg() {
     printf "${COLORS['blue']}:: 󰚰 ${COLORS['green']}Update takes total: %02d:%02d:%02d${COLORS['reset']}\n" $hours $minutes $seconds
 
 }
-update_pkg
+# update_pkg # commented for main function

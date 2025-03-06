@@ -3,9 +3,11 @@
 ROOT_DIR="$(cd -P "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 INSTALL=$ROOT_DIR/bash/src/install.sh
 REMOVE=$ROOT_DIR/bash/src/remove.sh
+UPDATE=$ROOT_DIR/bash/src/update.sh
 UTILS=$ROOT_DIR/bash/src/utils.sh
 source $INSTALL
 source $REMOVE
+source $UPDATE
 source $UTILS
 FILENAME=""
 
@@ -119,7 +121,8 @@ function main {
             ;;
         update)
             shift 1
-            update_sim
+            # update_sim
+            update_pkg
             ;;
         *)
             echo "Unknown command"
@@ -140,3 +143,4 @@ function main {
 
 # main -a install
 # main -a remove
+main -a update
