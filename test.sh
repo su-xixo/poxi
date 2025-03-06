@@ -60,6 +60,12 @@ function main {
                 ;;
             -f|--file)
                 FILENAME="$2"
+                if [[ -f $FILENAME ]]; then
+                    echo "file name is : $FILENAME"
+                else
+                    printf "${COLORS['red']}Error:${COLORS['reset']} '%s' is invalid file name.\n\t-f option require valid file name.\n" "$FILENAME" >&2
+                    exit 1
+                fi
                 shift 2
                 ;;
             -h|--help)
@@ -75,7 +81,7 @@ function main {
                 ;;
         esac
     done
-    echo $@
+    # echo $@
 
     # # Display configuration
     # echo "Runtime configuration:"
@@ -84,18 +90,22 @@ function main {
     # echo "accept-all: $ACCEPT_ALL"
 
     # FIXED: below error
-    echo "$opts"
+    # echo "$opts"
     # try regex to select only when their is no other 
     # parameter available after '--'
-    if [[ $opts =~ (-{2}[\s]*)$ ]]; then
-        echo -e "$0 ${COLORS['yellow']}only script name.${COLORS['reset']}"
-        exit 0
-    fi
+    # if [[ $opts =~ (-{2}[\s]*)$ ]]; then
+    #     if [[ -f $FILENAME ]]; then
+    #         echo "file name is : $FILENAME"
+    #     else
+    #         printf "${COLORS['red']}Error:${COLORS['reset']} '%s' is invalid file name.\n\t-f option require valid file name.\n" "$FILENAME"
+    #     fi
+    #     exit 0
+    # fi
 
     case "$1" in
         install)
             shift 1
-            if [[ -n "$FILENAME" ]]; then
+            if [[ -f "$FILENAME" ]]; then
                 # mapfile -t installed_packages < <(jq -r '.installed[]' $PKG_JSON_FILE)
                 local installed_packages=()
                 while IFS= read -r pkg; do
@@ -132,4 +142,4 @@ function main {
 # main -ba install pkg1 pkg2 pkg3
 # main -f install install
 # main -c
-main -a 
+main -a -f packages.json
