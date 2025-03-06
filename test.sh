@@ -47,10 +47,7 @@ function main {
         echo "Error: Invalid options passed!" >&2
         # usage
     fi
-    echo "$opts"
     eval set -- "$opts"
-    echo "$opts"
-    echo $@
     while true; do
         case "$1" in
             -b|--background)
@@ -80,11 +77,20 @@ function main {
     done
     echo $@
 
-    # Display configuration
-    echo "Runtime configuration:"
-    echo "----------------------"
-    echo "background: $BACKGROUND"
-    echo "accept-all: $ACCEPT_ALL"
+    # # Display configuration
+    # echo "Runtime configuration:"
+    # echo "----------------------"
+    # echo "background: $BACKGROUND"
+    # echo "accept-all: $ACCEPT_ALL"
+
+    echo "$opts"
+    # try regex to select only when their is no other 
+    # parameter available after '--'
+    if [ -z "$@" ]; then
+        echo "$@"
+        echo -e "$0 ${COLORS['yellow']}only script name.${COLORS['reset']}"
+        exit 0
+    fi
 
     case "$1" in
         install)
@@ -111,7 +117,8 @@ function main {
             update_sim
             ;;
         *)
-            install_sim $@
+            echo "Unknown command"
+            # install_sim $@
             # install_pkg $@
             shift 1
             ;;
@@ -123,4 +130,6 @@ function main {
 # Execute main function
 # main "$@"
 # main -ba install pkg1 pkg2 pkg3
-main -f install
+# main -f install install
+# main -c
+main -a 
