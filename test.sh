@@ -83,11 +83,11 @@ function main {
     # echo "background: $BACKGROUND"
     # echo "accept-all: $ACCEPT_ALL"
 
+    # FIXED: below error
     echo "$opts"
     # try regex to select only when their is no other 
     # parameter available after '--'
-    if [ -z "$@" ]; then
-        echo "$@"
+    if [[ $opts =~ (-{2}[\s]*)$ ]]; then
         echo -e "$0 ${COLORS['yellow']}only script name.${COLORS['reset']}"
         exit 0
     fi
