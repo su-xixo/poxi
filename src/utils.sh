@@ -16,6 +16,8 @@ ROOT_DIR="$(cd -P "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PKG_JSON_FILE=$ROOT_DIR/packages.json
 HOME_PKG_JSON_FILE="${XDG_DATA_HOME:-$HOME}/base/packages.json"
 POXI="pacman"
+BACKGROUND=false
+ACCEPT_ALL=false
 
 check_json_file(){
     data='
@@ -44,6 +46,8 @@ check_json_file(){
 function simmulate_install {
     for pkg in $@; do
         printf "󰦗 installing $pkg...\n"
+        POXI=$(printf "pacman -S --needed %s %s" "$([[ "$ACCEPT_ALL" == "true" ]] && echo "--noconfirm" || echo "")" "$pkg")
+        echo $POXI
         sleep 2&
     done
     wait

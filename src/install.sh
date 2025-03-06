@@ -51,5 +51,5 @@ install_pkg(){
         
     done
 }
-install_pkg $@
+# install_pkg $@ # commented for main function
 
