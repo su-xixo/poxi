@@ -43,5 +43,5 @@ remove_pkg(){
         
     done
 }
-remove_pkg $@
+# remove_pkg $@ # commented for main function
 

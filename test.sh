@@ -2,8 +2,10 @@
 
 ROOT_DIR="$(cd -P "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 INSTALL=$ROOT_DIR/bash/src/install.sh
+REMOVE=$ROOT_DIR/bash/src/remove.sh
 UTILS=$ROOT_DIR/bash/src/utils.sh
 source $INSTALL
+source $REMOVE
 source $UTILS
 FILENAME=""
 
@@ -81,29 +83,6 @@ function main {
                 ;;
         esac
     done
-    # useless comments below
-    # echo $@
-
-    # # Display configuration
-    # echo "Runtime configuration:"
-    # echo "----------------------"
-    # echo "background: $BACKGROUND"
-    # echo "accept-all: $ACCEPT_ALL"
-
-    #=> removed this implementation because $ main -option -f filename 
-    # without command is handy but this look worthless that why...
-    # FIXED: below error
-    # echo "$opts"
-    # try regex to select only when their is no other 
-    # parameter available after '--'
-    # if [[ $opts =~ (-{2}[\s]*)$ ]]; then
-    #     if [[ -f $FILENAME ]]; then
-    #         echo "file name is : $FILENAME"
-    #     else
-    #         printf "${COLORS['red']}Error:${COLORS['reset']} '%s' is invalid file name.\n\t-f option require valid file name.\n" "$FILENAME"
-    #     fi
-    #     exit 0
-    # fi
 
     case "$1" in
         install)
@@ -118,13 +97,25 @@ function main {
                     # install_sim "${installed_packages[@]}"
                 fi
             else
-                install_sim $@
+                # install_sim $@
+                install_pkg $@
             fi
-            # install_pkg $@
             ;;
         remove)
             shift 1
-            remove_sim
+            if [[ -n "$FILENAME" && -f "$FILENAME" ]]; then
+                if [[ "$(jq -r 'has("installed") and (.installed | length != 0)' "$FILENAME")" == 'true' ]]; then
+                    local removed_packages=()
+                    while IFS= read -r pkg; do
+                        removed_packages+=("$pkg")
+                    done < <(jq -r '.installed[]' $FILENAME)
+                    echo "removed packages: ${removed_packages[@]}"
+                    # remove_sim "${installed_packages[@]}"
+                fi
+            else
+                # remove_sim $@
+                remove_pkg $@
+            fi
             ;;
         update)
             shift 1
@@ -132,12 +123,9 @@ function main {
             ;;
         *)
             echo "Unknown command"
-            # install_sim $@
-            # install_pkg $@
             shift 1
             ;;
     esac
-    echo "Remaining arguments after parsing: $@"
 
 }
 
@@ -147,4 +135,8 @@ function main {
 # main -f install install
 # main -c
 # main -a -f packages.json install
-main -a -f packages.json
+# main -a -f packages.json remove
+# main -a -f packages.json
+
+# main -a install
+# main -a remove

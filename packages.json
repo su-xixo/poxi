@@ -25,6 +25,7 @@
     "endeavouros/arc-gtk-theme-eos",
     "pkg1",
     "pkg2",
-    "pkg3"
+    "pkg3",
+    "endeavouros/akm"
   ]
 }
