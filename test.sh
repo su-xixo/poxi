@@ -40,6 +40,8 @@ Command options:
 EOF
     exit 1
 }
+usage
+exit 0
 
 
 function main {
@@ -141,6 +143,6 @@ function main {
 # main -a -f packages.json remove
 # main -a -f packages.json
 
-# main -a install
+main -a install
 # main -a remove
-main -a update
+# main -a remove aur/pkg1 extra/pkg2

@@ -31,9 +31,8 @@ for helper in paru yay; do
     fi
 done
 
-printf "(pacman cmd: %s) and (aur helper cmd: %s)\n" "$POXI" "$AHELPER"
+# printf "(pacman cmd: %s) and (aur helper cmd: %s)\n" "$POXI" "$AHELPER"
 
-POXI="pacman"
 BACKGROUND=false
 ACCEPT_ALL=false
 
@@ -63,9 +62,13 @@ check_json_file(){
 # installation simmulation
 function simmulate_install {
     for pkg in $@; do
+        POXI_install=$(printf "%s -S --needed %s %s" "$POXI" "$([[ "$ACCEPT_ALL" == "true" ]] && echo "--noconfirm" || echo "")" "$pkg") # pacman -S --needed --noconfirm aur/pkg2
+
+        if [[ $pkg =~ ^(aur\/) ]]; then
+            POXI_install=$(printf "%s -S --needed %s %s" "$AHELPER" "$([[ "$ACCEPT_ALL" == "true" ]] && echo "--noconfirm" || echo "")" "$pkg") # paru -S --needed --noconfirm aur/pkg2
+        fi
         printf "󰦗 installing $pkg...\n"
-        POXI=$(printf "pacman -S --needed %s %s" "$([[ "$ACCEPT_ALL" == "true" ]] && echo "--noconfirm" || echo "")" "$pkg")
-        echo $POXI
+        echo ${POXI_install}
         sleep 2&
     done
     wait
@@ -75,7 +78,13 @@ function simmulate_install {
 # remove simmulation
 function simmulate_remove {
     for pkg in $@; do
+        POXI_remove=$(printf "%s -Rns %s %s" "$POXI" "$([[ "$ACCEPT_ALL" == "true" ]] && echo "--noconfirm" || echo "")" "$pkg") # pacman -Rns --noconfirm aur/pkg2
+
+        if [[ $pkg =~ ^(aur\/) ]]; then
+            POXI_remove=$(printf "%s -Rns %s %s" "$AHELPER" "$([[ "$ACCEPT_ALL" == "true" ]] && echo "--noconfirm" || echo "")" "$pkg") # paru -Rns --noconfirm aur/pkg2
+        fi
         printf "󰦗 Removing $pkg...\n"
+        echo ${POXI_remove}
         sleep 2&
     done
     wait
@@ -91,18 +100,30 @@ get_package_detail() {
 
 ## get all packages name and return selected pkgs in one string
 get_all_packages(){
-    local PKGS="$($POXI --color=always -Sl \
-    | head -n 5 \
-    | fzf --ansi --multi --sync \
+    if test -n "$AHELPER" && test -v AHELPER; then
+        local POXI_tool=$AHELPER
+        local _sync=""
+    else
+        local POXI_tool=$POXI
+        local _sync="--sync"
+    fi
+    local PKGS="$($POXI_tool --color=always -Sl \
+    | fzf --ansi --multi $_sync \
     | awk '{s = s $1 "/" $2 " "} END {print s}')"
     echo $PKGS
 }
 
 ## get all installed packages name and return selected pkgs in one string
 get_installed_packages() {
-    local PKGS="$($POXI --color=always -Qe \
-    | head -n 5 \
-    | fzf --ansi --multi --sync \
+    if test -n "$AHELPER" && test -v AHELPER; then
+        local POXI_tool=$AHELPER
+        local _sync=""
+    else
+        local POXI_tool=$POXI
+        local _sync="--sync"
+    fi
+    local PKGS="$($POXI_tool --color=always -Qe \
+    | fzf --ansi --multi $_sync \
     | awk '{s=s $1 " "} END{print s}')"
     echo $PKGS  
 }

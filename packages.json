@@ -26,6 +26,9 @@
     "pkg1",
     "pkg2",
     "pkg3",
-    "endeavouros/akm"
+    "endeavouros/akm",
+    "aur/pkg1",
+    "aur/pkg2",
+    "extra/pkg2"
   ]
 }

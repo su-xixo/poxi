@@ -9,6 +9,8 @@
     "alsa-firmware",
     "alsa-plugins",
     "alsa-utils",
-    "arc-gtk-theme-eos"
+    "arc-gtk-theme-eos",
+    "aur/pkg1",
+    "extra/pkg2"
   ]
 }
