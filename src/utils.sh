@@ -15,6 +15,24 @@ declare -A COLORS=(
 ROOT_DIR="$(cd -P "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PKG_JSON_FILE=$ROOT_DIR/packages.json
 HOME_PKG_JSON_FILE="${XDG_DATA_HOME:-$HOME}/base/packages.json"
+# check if root
+if [[ $EUID -eq 0 ]]; then
+    POXI="pacman"
+    is_root=true
+else
+    POXI="sudo pacman"
+    is_root=false
+fi
+# set aur helper
+for helper in paru yay; do
+    if command -v $helper &>/dev/null; then
+        AHELPER=$helper
+        break
+    fi
+done
+
+printf "(pacman cmd: %s) and (aur helper cmd: %s)\n" "$POXI" "$AHELPER"
+
 POXI="pacman"
 BACKGROUND=false
 ACCEPT_ALL=false
