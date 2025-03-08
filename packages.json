@@ -30,15 +30,12 @@
     "aur/pkg1",
     "aur/pkg2",
     "extra/pkg2",
-    "openssh"
+    "openssh",
+    "extra/bat"
   ],
   "poxi_installed": {
     "cinnamon": [
-      "bat",
-      "pkg2"
-    ],
-    "gnome": [
-      "bat"
+      "extra/bat"
     ]
   }
 }

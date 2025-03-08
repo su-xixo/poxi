@@ -21,7 +21,6 @@ function add_to_json {
         jq --arg pkg "$pkg" '.installed += [$pkg]' $PKG_JSON_FILE | sponge $PKG_JSON_FILE
     fi
     desktop=$DESKTOP_SESSION
-    desktop="gnome"
     jq "
         if has(\"poxi_installed\") then
             .poxi_installed.$desktop |= (. // [])
