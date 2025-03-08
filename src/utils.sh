@@ -35,7 +35,6 @@ done
 
 # printf "(pacman cmd: %s) and (aur helper cmd: %s)\n" "$POXI" "$AHELPER"
 
-BACKGROUND=false
 ACCEPT_ALL=false
 
 check_json_file(){

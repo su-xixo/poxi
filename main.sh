@@ -23,7 +23,6 @@ Usage: $0 [OPTIONS] [COMMAND] [PACKAGES]
 
 Other options:
   -h, --help                 Show this help message
-  -b, --background           Execute in background
   -a, --accept-all           Accept all packages
   -f, --file fileame         Packages json file 
 
@@ -47,10 +46,6 @@ function main {
     eval set -- "$opts"
     while true; do
         case "$1" in
-            -b|--background)
-                BACKGROUND=true
-                shift 1
-                ;;
             -a|--accept-all)
                 ACCEPT_ALL=true
                 shift 1
