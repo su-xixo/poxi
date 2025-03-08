@@ -29,6 +29,7 @@
     "endeavouros/akm",
     "aur/pkg1",
     "aur/pkg2",
-    "extra/pkg2"
+    "extra/pkg2",
+    "openssh"
   ]
 }

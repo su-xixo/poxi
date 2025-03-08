@@ -39,11 +39,17 @@ install_pkg(){
     fi
 
     for pkg in ${pkgs[@]}; do
-        simmulate_install $pkg && is_installed=$? || is_installed=$?
+        printf "󰦗 installing $pkg...\n"
+        POXI_install=$(printf "%s -S --needed %s %s" "$POXI" "$([[ "$ACCEPT_ALL" == "true" ]] && echo "--noconfirm" || echo "")" "$pkg") # pacman -S --needed --noconfirm aur/pkg2
+
+        if [[ $pkg =~ ^(aur\/) ]]; then
+            POXI_install=$(printf "%s -S --needed %s %s" "$AHELPER" "$([[ "$ACCEPT_ALL" == "true" ]] && echo "--noconfirm" || echo "")" "$pkg") # paru -S --needed --noconfirm aur/pkg2
+        fi
+        eval $POXI_install && is_installed=$? || is_installed=$?
         if test $is_installed -eq 0; then
             # echo "adding $pkg into json file"
             add_to_json $pkg
-            
+            echo " installation done"
         else
             echo "$pkg not installed"
             log_non_installed $pkg

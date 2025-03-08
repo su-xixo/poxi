@@ -67,12 +67,9 @@ function simmulate_install {
         if [[ $pkg =~ ^(aur\/) ]]; then
             POXI_install=$(printf "%s -S --needed %s %s" "$AHELPER" "$([[ "$ACCEPT_ALL" == "true" ]] && echo "--noconfirm" || echo "")" "$pkg") # paru -S --needed --noconfirm aur/pkg2
         fi
-        printf "󰦗 installing $pkg...\n"
-        echo ${POXI_install}
-        sleep 2&
+        eval ${POXI_install}
+        echo "$?"
     done
-    wait
-    echo " installation done"
 }
 
 # remove simmulation
@@ -83,12 +80,9 @@ function simmulate_remove {
         if [[ $pkg =~ ^(aur\/) ]]; then
             POXI_remove=$(printf "%s -Rns %s %s" "$AHELPER" "$([[ "$ACCEPT_ALL" == "true" ]] && echo "--noconfirm" || echo "")" "$pkg") # paru -Rns --noconfirm aur/pkg2
         fi
-        printf "󰦗 Removing $pkg...\n"
-        echo ${POXI_remove}
-        sleep 2&
+        eval ${POXI_remove}
+        echo "$?"
     done
-    wait
-    echo " Removal done"
 }
 
 ## get package information

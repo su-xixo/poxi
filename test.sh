@@ -24,9 +24,6 @@ usage() {
     cat <<EOF
 Usage: $0 [OPTIONS] [COMMAND] [PACKAGES]
 
-Mandatory options:
-  -u, --username USERNAME    Specify username (required)
-  
 Other options:
   -h, --help                 Show this help message
   -b, --background           Execute in background
@@ -40,8 +37,8 @@ Command options:
 EOF
     exit 1
 }
-usage
-exit 0
+# usage
+# exit 0
 
 
 function main {
@@ -99,6 +96,7 @@ function main {
                     done < <(jq -r '.installed[]' $FILENAME)
                     echo "installed packages: ${installed_packages[@]}"
                     # install_sim "${installed_packages[@]}"
+                    install_pkg ${installed_packages[@]}
                 fi
             else
                 # install_sim $@
@@ -139,10 +137,12 @@ function main {
 # main -ba install pkg1 pkg2 pkg3
 # main -f install install
 # main -c
-# main -a -f packages.json install
+# main -a -f packages.json iaurnstall
 # main -a -f packages.json remove
 # main -a -f packages.json
 
-main -a install
+# main -a install bat
+# main -a remove bat
 # main -a remove
 # main -a remove aur/pkg1 extra/pkg2
+main

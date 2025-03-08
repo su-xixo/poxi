@@ -1,5 +1,9 @@
 {
   "not_installed": [
+    "bat",
+    "endeavouros/bashdb",
+    "endeavouros/calamares",
+    "openss",
     "pkg1",
     "pkg2",
     "pkg3",
@@ -11,6 +15,7 @@
     "alsa-utils",
     "arc-gtk-theme-eos",
     "aur/pkg1",
+    "bat",
     "extra/pkg2"
   ]
 }

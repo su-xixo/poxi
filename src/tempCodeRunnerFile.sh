@@ -1,10 +1,6 @@
-for helper in p; do
-    if command -v "$helper" &>/dev/null; then
-        AHELPER="$helper"
-        break
-    fi
-done
-if [[ ! -v $AHELPER ]]; then
-    echo "dont exist"
-fi
-echo $AHELPER
+main(){
+    read -p "this is example read: " a
+    echo "this is value of a: $a"
+    sudo pacman -S cowsay
+}
+main > /dev/null
