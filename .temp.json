@@ -16,6 +16,7 @@
     "arc-gtk-theme-eos",
     "aur/pkg1",
     "bat",
-    "extra/pkg2"
+    "extra/pkg2",
+    "xcowsay"
   ]
 }

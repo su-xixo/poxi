@@ -15,15 +15,6 @@ for item in $(find $SCRIPT_DIR -name "*.sh" -type f -exec basename {} \;); do
     
 done
 
-# ROOT_DIR="$(cd -P "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-# INSTALL=$ROOT_DIR/bash/src/install.sh
-# REMOVE=$ROOT_DIR/bash/src/remove.sh
-# UPDATE=$ROOT_DIR/bash/src/update.sh
-# UTILS=$ROOT_DIR/bash/src/utils.sh
-# source $INSTALL
-# source $REMOVE
-# source $UPDATE
-# source $UTILS
 FILENAME=""
 
 usage() {
@@ -92,11 +83,11 @@ function main {
         install)
             shift 1
             if [[ -n "$FILENAME" && -f "$FILENAME" ]]; then
-                if [[ "$(jq -r 'has("installed") and (.installed | length != 0)' "$FILENAME")" == 'true' ]]; then
+                if [[ "$(jq -r 'has("poxi_installed") and (.poxi_installed | length != 0)' "$FILENAME")" == 'true' ]]; then
                     local installed_packages=()
                     while IFS= read -r pkg; do
                         installed_packages+=("$pkg")
-                    done < <(jq -r '.installed[]' $FILENAME)
+                    done < <(jq -r ".poxi_installed.$DESKTOP[]" $FILENAME)
                     echo "installed packages: ${installed_packages[@]}"
                     # install_sim "${installed_packages[@]}"
                     install_pkg ${installed_packages[@]}
@@ -109,13 +100,13 @@ function main {
         remove)
             shift 1
             if [[ -n "$FILENAME" && -f "$FILENAME" ]]; then
-                if [[ "$(jq -r 'has("installed") and (.installed | length != 0)' "$FILENAME")" == 'true' ]]; then
+                if [[ "$(jq -r 'has("poxi_installed") and (.poxi_installed | length != 0)' "$FILENAME")" == 'true' ]]; then
                     local removed_packages=()
                     while IFS= read -r pkg; do
                         removed_packages+=("$pkg")
-                    done < <(jq -r '.installed[]' $FILENAME)
+                    done < <(jq -r ".poxi_installed.$DESKTOP[]" $FILENAME)
                     echo "removed packages: ${removed_packages[@]}"
-                    # remove_pkg "${installed_packages[@]}"
+                    remove_pkg ${removed_packages[@]}
                 fi
             else
                 # remove_sim $@

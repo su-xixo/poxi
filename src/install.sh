@@ -20,17 +20,16 @@ function add_to_json {
     if [ $check == 'false' ]; then
         jq --arg pkg "$pkg" '.installed += [$pkg]' $PKG_JSON_FILE | sponge $PKG_JSON_FILE
     fi
-    desktop=$DESKTOP_SESSION
     jq "
         if has(\"poxi_installed\") then
-            .poxi_installed.$desktop |= (. // [])
+            .poxi_installed.$DESKTOP |= (. // [])
         else
-            . + {\"poxi_installed\": {$desktop: []}}
+            . + {\"poxi_installed\": {$DESKTOP: []}}
         end
     " $PKG_JSON_FILE > temp.json && mv temp.json $PKG_JSON_FILE
 
-    jq ".poxi_installed.$desktop+=[\"$pkg\"]" $PKG_JSON_FILE > temp.json && mv temp.json $PKG_JSON_FILE
-    jq ".poxi_installed.$desktop |= unique" $PKG_JSON_FILE > temp.json && mv temp.json $PKG_JSON_FILE
+    jq ".poxi_installed.$DESKTOP+=[\"$pkg\"]" $PKG_JSON_FILE > temp.json && mv temp.json $PKG_JSON_FILE
+    jq ".poxi_installed.$DESKTOP |= unique" $PKG_JSON_FILE > temp.json && mv temp.json $PKG_JSON_FILE
 }
 
 function log_non_installed {
