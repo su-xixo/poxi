@@ -141,8 +141,8 @@ function main {
 # main -a -f packages.json remove
 # main -a -f packages.json
 
-# main -a install bat
+main -a install bat
 # main -a remove bat
 # main -a remove
 # main -a remove aur/pkg1 extra/pkg2
-main
+# main

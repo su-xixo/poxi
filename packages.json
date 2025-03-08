@@ -31,5 +31,14 @@
     "aur/pkg2",
     "extra/pkg2",
     "openssh"
-  ]
+  ],
+  "poxi_installed": {
+    "cinnamon": [
+      "bat",
+      "pkg2"
+    ],
+    "gnome": [
+      "bat"
+    ]
+  }
 }

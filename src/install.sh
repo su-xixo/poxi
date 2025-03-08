@@ -4,6 +4,7 @@ ROOT_DIR="$(cd -P "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 UTILS=$ROOT_DIR/src/utils.sh
 source $UTILS
 
+# version 0.1: without desktop environment
 function add_to_json {
     local pkg=$1
     local check=$(jq --arg pkg "$pkg" '.installed|any(.==$pkg)' $PKG_JSON_FILE)
@@ -11,6 +12,28 @@ function add_to_json {
         jq --arg pkg "$pkg" '.installed += [$pkg]' $PKG_JSON_FILE | sponge $PKG_JSON_FILE
     fi
 }
+
+# version 0.2: with desktop environment
+function add_to_json {
+    local pkg=$1
+    local check=$(jq --arg pkg "$pkg" '.installed|any(.==$pkg)' $PKG_JSON_FILE)
+    if [ $check == 'false' ]; then
+        jq --arg pkg "$pkg" '.installed += [$pkg]' $PKG_JSON_FILE | sponge $PKG_JSON_FILE
+    fi
+    desktop=$DESKTOP_SESSION
+    desktop="gnome"
+    jq "
+        if has(\"poxi_installed\") then
+            .poxi_installed.$desktop |= (. // [])
+        else
+            . + {\"poxi_installed\": {$desktop: []}}
+        end
+    " $PKG_JSON_FILE > temp.json && mv temp.json $PKG_JSON_FILE
+
+    jq ".poxi_installed.$desktop+=[\"$pkg\"]" $PKG_JSON_FILE > temp.json && mv temp.json $PKG_JSON_FILE
+    jq ".poxi_installed.$desktop |= unique" $PKG_JSON_FILE > temp.json && mv temp.json $PKG_JSON_FILE
+}
+
 function log_non_installed {
     local pkg=$1
     local file=".temp.json"
