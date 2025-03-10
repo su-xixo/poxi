@@ -37,8 +37,8 @@ EOF
 function main {
     # Capture remaining arguments after options are parsed
     local opts
-    local short_options='bahf:'
-    local long_options='background,accept-all,help,file:'
+    local short_options='ahf:'
+    local long_options='accept-all,help,file:'
     if ! opts=$(getopt -o $short_options --long $long_options -n "$0" -- "$@"); then
         echo "Error: Invalid options passed!" >&2
         # usage

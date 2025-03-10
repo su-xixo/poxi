@@ -1,10 +1,10 @@
 #!/bin/bash
 
 ROOT_DIR="$(cd -P "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-INSTALL=$ROOT_DIR/bash/src/install.sh
-REMOVE=$ROOT_DIR/bash/src/remove.sh
-UPDATE=$ROOT_DIR/bash/src/update.sh
-UTILS=$ROOT_DIR/bash/src/utils.sh
+INSTALL=$ROOT_DIR/poxi/src/install.sh
+REMOVE=$ROOT_DIR/poxi/src/remove.sh
+UPDATE=$ROOT_DIR/poxi/src/update.sh
+UTILS=$ROOT_DIR/poxi/src/utils.sh
 source $INSTALL
 source $REMOVE
 source $UPDATE
