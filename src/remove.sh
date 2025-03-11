@@ -42,5 +42,5 @@ remove_pkg(){
         [ $? -eq 1 ] && log removed $pkg
     done
 }
-remove_pkg $@ # commented for main function
+# remove_pkg $@ # commented for main function
 

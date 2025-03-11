@@ -1,6 +1,8 @@
 {
   "not_installed": [
-    "extra/augeas"
+    "bat",
+    "extra/augeas",
+    "extra/bat"
   ],
   "removed": [
     "kitty",

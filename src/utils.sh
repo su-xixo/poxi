@@ -93,6 +93,7 @@ get_package_detail() {
     echo "$Preview"
 }
 
+exit 0
 ## get all packages name and return selected pkgs in one string
 get_all_packages(){
     if test -n "$AHELPER" && test -v AHELPER; then
@@ -104,9 +105,17 @@ get_all_packages(){
     fi
     local PKGS="$($POXI_tool --color=always -Sl \
     | fzf --ansi --multi $_sync \
+    --border --padding 1,2 \
+    --cycle \
+    --layout=reverse \
+    --border-label ' POXI ' \
+    --preview "echo {2} | xargs -ro $POXI_tool -Si --color=always" \
     | awk '{s = s $1 "/" $2 " "} END {print s}')"
     echo $PKGS
 }
+# --preview 'echo {2} | xargs -ro $POXI_tool -Si --color=always'
+get_all_packages
+exit 0
 
 ## get all installed packages name and return selected pkgs in one string
 get_installed_packages() {
@@ -150,7 +159,7 @@ generate_cmd() {
     else
         needed=""
     fi
-    if [ $accept_all == 'true' ]; then
+    if [ $ACCEPT_ALL == 'true' ]; then
         accept_all=" --noconfirm"
     else
         accept_all=""

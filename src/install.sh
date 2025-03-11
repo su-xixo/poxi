@@ -69,4 +69,4 @@ install_pkg(){
     done
 }
 
-install_pkg $@
+# install_pkg $@
