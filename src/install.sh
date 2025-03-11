@@ -53,30 +53,98 @@ function log_non_installed {
         )' $file > temp.json && mv temp.json $file
 }
 
+generate_cmd() {
+    local options needed accept_all pkgs
+    options="$1" # '-S'
+    needed="${2:-true}" # 'true', 'false'
+    accept_all="${3:-true}" # 'true', 'false'
+    pkgs=(${@:4}) # array
+
+    if [ $needed == 'true' ]; then
+        needed=" --needed"
+    else
+        needed=""
+    fi
+    if [ $accept_all == 'true' ]; then
+        accept_all=" --noconfirm"
+    else
+        accept_all=""
+    fi
+
+    # extract aur packages from pkgs and store into POXI_aur_install
+    local POXI_aur_install=() # store aur packages
+    local POXI_install=() # store official packages
+    for pkg in ${pkgs[@]}; do
+        if [[ $pkg =~ ^(aur\/) ]]; then
+            POXI_aur_pkgs+=("$pkg")
+        else
+            POXI_official_pkgs+=("$pkg")
+        fi
+    done
+
+    [ ${#POXI_official_pkgs[@]} -ne 0 ] && local command_string_for_official_packages="$POXI $options$needed$accept_all ${POXI_official_pkgs[@]}"
+    [ ${#POXI_aur_pkgs[@]} -ne 0 ] && local command_string_for_aur_packages="$AHELPER $options$needed$accept_all ${POXI_aur_pkgs[@]}"
+    printf "%s\n" "$command_string_for_official_packages" "$command_string_for_aur_packages"
+}
+
+# new install approach 
 install_pkg(){
     local pkgs=($@)
     if [ ${#pkgs[@]} -eq 0 ]; then
         pkgs+=($(get_all_packages))
     fi
-
-    for pkg in ${pkgs[@]}; do
-        printf "󰦗 installing $pkg...\n"
-        POXI_install=$(printf "%s -S --needed %s %s" "$POXI" "$([[ "$ACCEPT_ALL" == "true" ]] && echo "--noconfirm" || echo "")" "$pkg") # pacman -S --needed --noconfirm aur/pkg2
-
-        if [[ $pkg =~ ^(aur\/) ]]; then
-            POXI_install=$(printf "%s -S --needed %s %s" "$AHELPER" "$([[ "$ACCEPT_ALL" == "true" ]] && echo "--noconfirm" || echo "")" "$pkg") # paru -S --needed --noconfirm aur/pkg2
-        fi
-        eval $POXI_install && is_installed=$? || is_installed=$?
-        if test $is_installed -eq 0; then
-            # echo "adding $pkg into json file"
-            add_to_json $pkg
-            echo " installation done"
-        else
-            echo "$pkg not installed"
-            log_non_installed $pkg
-        fi
-        
+    IFS=$'\n' read -d '' -a POXI_install <<<"$(generate_cmd '-S' 'true' 'true' "${pkgs[@]}")"
+    for cmd in "${POXI_install[@]}"; do
+        eval "$cmd"
     done
 }
-# install_pkg $@ # commented for main function
+
+install_pkg pkg1 pkg2 pkg3 pkg4 pkg5 pkg6
+# install_pkg $@
+
+# check_package_installed() {
+#   local package_name="$1"
+
+#   pacman -Q "$package_name" &>/dev/null  # Suppress output
+#   if [[ $? -eq 0 ]]; then
+#     echo "Package '$package_name' is installed."
+#     return 0 # Return success
+#   else
+#     echo "Package '$package_name' is NOT installed."
+#     return 1 # Return failure
+#   fi
+# }
+
+# # Example Usage
+# check_package_installed "neovim"
+# check_package_installed "nonexistent_package"
+
+
+# # old install approach
+# install_pkg(){
+#     local pkgs=($@)
+#     if [ ${#pkgs[@]} -eq 0 ]; then
+#         pkgs+=($(get_all_packages))
+#     fi
+
+#     for pkg in ${pkgs[@]}; do
+#         printf "󰦗 installing $pkg...\n"
+#         POXI_install=$(printf "%s -S --needed %s %s" "$POXI" "$([[ "$ACCEPT_ALL" == "true" ]] && echo "--noconfirm" || echo "")" "$pkg") # pacman -S --needed --noconfirm aur/pkg2
+
+#         if [[ $pkg =~ ^(aur\/) ]]; then
+#             POXI_install=$(printf "%s -S --needed %s %s" "$AHELPER" "$([[ "$ACCEPT_ALL" == "true" ]] && echo "--noconfirm" || echo "")" "$pkg") # paru -S --needed --noconfirm aur/pkg2
+#         fi
+#         eval $POXI_install && is_installed=$? || is_installed=$?
+#         if test $is_installed -eq 0; then
+#             # echo "adding $pkg into json file"
+#             add_to_json $pkg
+#             echo " installation done"
+#         else
+#             echo "$pkg not installed"
+#             log_non_installed $pkg
+#         fi
+        
+#     done
+# }
+# # install_pkg $@ # commented for main function
 
