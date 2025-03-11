@@ -1,5 +1,6 @@
 #!/bin/bash
 # COMMAND NAME: POXI
+__VERSION="0.1"
 CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SCRIPT_DIR="$CURRENT_DIR/src"
 SCRIPT_NAME="$(basename $0)"
@@ -22,6 +23,7 @@ usage() {
 Usage: $0 [OPTIONS] [COMMAND] [PACKAGES]
 
 Other options:
+  -v, --version              Show version
   -h, --help                 Show this help message
   -a, --accept-all           Accept all packages
   -f, --file fileame         Packages json file 
@@ -40,8 +42,8 @@ check_json_file
 function main {
     # Capture remaining arguments after options are parsed
     local opts
-    local short_options='ahf:'
-    local long_options='accept-all,help,file:'
+    local short_options='vahf:'
+    local long_options='version,accept-all,help,file:'
     if ! opts=$(getopt -o $short_options --long $long_options -n "$0" -- "$@"); then
         echo "Error: Invalid options passed!" >&2
         # usage
@@ -65,6 +67,10 @@ function main {
                 ;;
             -h|--help)
                 usage
+                ;;
+            -v|--version)
+                printf "%s ${COLORS['green']}v%s${COLORS['reset']}\n" "${0##*/}" "$__VERSION"
+                exit 0
                 ;;
             --)
                 shift 1
@@ -123,4 +129,5 @@ function main {
 
 }
 
-main $@
+# main $@
+main -v

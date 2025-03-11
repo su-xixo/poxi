@@ -4,7 +4,7 @@
 SCRIPT_NAME := poxi
 SCRIPT_DIR := $(CURDIR)
 SRC_DIR := $(SCRIPT_DIR)/src
-MAIN_SCRIPT := $(SCRIPT_DIR)/main.sh
+MAIN_SCRIPT := $(SCRIPT_DIR)/poxi
 UTILS_SCRIPT := $(SRC_DIR)/utils.sh
 
 # Installation details
