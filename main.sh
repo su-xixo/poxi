@@ -34,6 +34,9 @@ EOF
     exit 1
 }
 
+# make sure packages.json file is availabe
+check_json_file
+
 function main {
     # Capture remaining arguments after options are parsed
     local opts

@@ -45,9 +45,7 @@ check_json_file(){
             "terminal": ["alacritty", "kitty"],
             "utilites": ["moreutils", "fzf", "eza", "zoxide", "zsh"]
         },
-        "installed": [
-            "bat"
-        ]
+        "installed": []
     }
     '
     if [[ -f "$PKG_JSON_FILE" ]]; then

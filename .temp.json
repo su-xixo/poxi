@@ -1,11 +1,5 @@
 {
-  "not_installed": [
-    "bat",
-    "extra/augeas",
-    "extra/bat"
-  ],
   "removed": [
-    "kitty",
-    "pkgdiff"
+    "bat"
   ]
 }

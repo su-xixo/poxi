@@ -1,18 +1,18 @@
 {
   "required": {
     "editor": [
+      "neovim",
       "helix",
-      "micro",
-      "neovim"
+      "micro"
     ],
     "terminal": [
       "alacritty",
       "kitty"
     ],
     "utilites": [
-      "eza",
-      "fzf",
       "moreutils",
+      "fzf",
+      "eza",
       "zoxide",
       "zsh"
     ]
@@ -20,17 +20,13 @@
   "installed": [
     "bat",
     "extra/bat",
-    "extra/pkgdiff",
-    "endeavouros/downgrade",
-    "endeavouros/ckbcomp"
+    "extra/kitty"
   ],
   "poxi_installed": {
     "cinnamon": [
       "bat",
-      "endeavouros/ckbcomp",
-      "endeavouros/downgrade",
       "extra/bat",
-      "extra/pkgdiff"
+      "extra/kitty"
     ]
   }
 }

@@ -1,1 +1,0 @@
-pacman --color=always -Si $PKG
