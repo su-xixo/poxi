@@ -1,22 +1,14 @@
 {
   "not_installed": [
-    "bat",
-    "endeavouros/bashdb",
-    "endeavouros/calamares",
-    "openss",
+    "extra/bat",
+    "extra/pkgdiff",
+    "extra/pkgstats",
     "pkg1",
     "pkg2",
     "pkg3",
-    "pkg4"
+    "pkg4",
+    "pkg5",
+    "pkg6"
   ],
-  "removed": [
-    "alsa-firmware",
-    "alsa-plugins",
-    "alsa-utils",
-    "arc-gtk-theme-eos",
-    "aur/pkg1",
-    "bat",
-    "extra/pkg2",
-    "xcowsay"
-  ]
+  "removed": []
 }

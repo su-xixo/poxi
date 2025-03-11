@@ -19,23 +19,12 @@
   },
   "installed": [
     "bat",
-    "endeavouros/ckbcomp",
-    "endeavouros/calamares",
-    "endeavouros/bashdb",
-    "endeavouros/arc-gtk-theme-eos",
-    "pkg1",
-    "pkg2",
-    "pkg3",
-    "endeavouros/akm",
-    "aur/pkg1",
-    "aur/pkg2",
-    "extra/pkg2",
-    "openssh",
     "extra/bat"
   ],
   "poxi_installed": {
     "cinnamon": [
-      "bat"
+      "bat",
+      "extra/bat"
     ]
   }
 }
