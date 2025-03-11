@@ -19,12 +19,18 @@
   },
   "installed": [
     "bat",
-    "extra/bat"
+    "extra/bat",
+    "extra/pkgdiff",
+    "endeavouros/downgrade",
+    "endeavouros/ckbcomp"
   ],
   "poxi_installed": {
     "cinnamon": [
       "bat",
-      "extra/bat"
+      "endeavouros/ckbcomp",
+      "endeavouros/downgrade",
+      "extra/bat",
+      "extra/pkgdiff"
     ]
   }
 }

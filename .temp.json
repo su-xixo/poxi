@@ -1,14 +1,9 @@
 {
   "not_installed": [
-    "extra/bat",
-    "extra/pkgdiff",
-    "extra/pkgstats",
-    "pkg1",
-    "pkg2",
-    "pkg3",
-    "pkg4",
-    "pkg5",
-    "pkg6"
+    "extra/augeas"
   ],
-  "removed": []
+  "removed": [
+    "kitty",
+    "pkgdiff"
+  ]
 }

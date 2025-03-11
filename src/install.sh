@@ -53,55 +53,6 @@ function log_non_installed {
         )' $file > temp.json && mv temp.json $file
 }
 
-# check for insatalled packages
-check_package_installed() {
-  local package_name="$1" # extra/bat
-  package_name=${package_name##*/} # trim longest pattern match O/P: bat
-  pacman -Q "$package_name" &>/dev/null  # Suppress output
-  if [[ $? -eq 0 ]]; then
-    echo "Package '$package_name' is installed."
-    return 0 # Return success
-  else
-    echo "Package '$package_name' is NOT installed."
-    return 1 # Return failure
-  fi
-}
-
-
-generate_cmd() {
-    local options needed accept_all pkgs
-    options="$1" # '-S'
-    needed="${2:-true}" # 'true', 'false'
-    accept_all="${3:-true}" # 'true', 'false'
-    pkgs=(${@:4}) # array
-
-    if [ $needed == 'true' ]; then
-        needed=" --needed"
-    else
-        needed=""
-    fi
-    if [ $accept_all == 'true' ]; then
-        accept_all=" --noconfirm"
-    else
-        accept_all=""
-    fi
-
-    # extract aur packages from pkgs and store into POXI_aur_install
-    local POXI_aur_install=() # store aur packages
-    local POXI_install=() # store official packages
-    for pkg in ${pkgs[@]}; do
-        if [[ $pkg =~ ^(aur\/) ]]; then
-            POXI_aur_pkgs+=("$pkg")
-        else
-            POXI_official_pkgs+=("$pkg")
-        fi
-    done
-
-    [ ${#POXI_official_pkgs[@]} -ne 0 ] && local command_string_for_official_packages="$POXI $options$needed$accept_all ${POXI_official_pkgs[@]}"
-    [ ${#POXI_aur_pkgs[@]} -ne 0 ] && local command_string_for_aur_packages="$AHELPER $options$needed$accept_all ${POXI_aur_pkgs[@]}"
-    printf "%s\n" "$command_string_for_official_packages" "$command_string_for_aur_packages"
-}
-
 # new install approach 
 install_pkg(){
     local pkgs=($@)

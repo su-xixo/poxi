@@ -9,7 +9,7 @@ function log {
     shift 1
     local pkg=$1
     local file=".temp.json"
-    local new_object=$(printf '{"name": "%s"}' $pkg)
+    local new_object=$(printf "%s" "$pkg")
     echo "logged pkg is: $new_object"
     if [ ! -f "$file" ] || [ ! -s "$file" ]; then # no file or empty
         echo "{}" > $file
@@ -33,21 +33,14 @@ remove_pkg(){
     if [ ${#pkgs[@]} -eq 0 ]; then
         pkgs+=($(get_installed_packages))
     fi
-    
-    for pkg in ${pkgs[@]}; do
-        printf "󰦗 Removing $pkg...\n"
-        POXI_remove=$(printf "%s -Rns %s %s" "$POXI" "$([[ "$ACCEPT_ALL" == "true" ]] && echo "--noconfirm" || echo "")" "$pkg") # pacman -Rns --noconfirm aur/pkg2
-
-        if [[ $pkg =~ ^(aur\/) ]]; then
-            POXI_remove=$(printf "%s -Rns %s %s" "$AHELPER" "$([[ "$ACCEPT_ALL" == "true" ]] && echo "--noconfirm" || echo "")" "$pkg") # paru -Rns --noconfirm aur/pkg2
-        fi
-        eval $POXI_remove && is_removed=$? || is_removed=$?
-        if [[ $is_removed == "0" ]]; then
-            echo " $pkg removed"
-            log removed $pkg
-        fi
-        
+    IFS=$'\n' read -d '' -a POXI_remove <<<"$(generate_cmd '-Rns' 'false' 'false' "${pkgs[@]}")"
+    for cmd in "${POXI_remove[@]}"; do
+        eval "$cmd"
+    done
+    for pkg in "${pkgs[@]}"; do
+        check_package_installed $pkg
+        [ $? -eq 1 ] && log removed $pkg
     done
 }
-# remove_pkg $@ # commented for main function
+remove_pkg $@ # commented for main function
 
