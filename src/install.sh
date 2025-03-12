@@ -4,18 +4,14 @@ ROOT_DIR="$(cd -P "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 UTILS=$ROOT_DIR/src/utils.sh
 source $UTILS
 
-# version 0.1: without desktop environment
-function add_to_json {
-    local pkg=$1
-    local check=$(jq --arg pkg "$pkg" '.installed|any(.==$pkg)' $PKG_JSON_FILE)
-    if [ $check == 'false' ]; then
-        jq --arg pkg "$pkg" '.installed += [$pkg]' $PKG_JSON_FILE | sponge $PKG_JSON_FILE
-    fi
-}
-
 # version 0.2: with desktop environment
 function add_to_json {
+    # if want O/P: extra/pkg
     local pkg=$1
+    # if want O/P: pkg
+    if [[ "$pkg" =~ ^[a-z]*/ ]]; then # when 'alphabats/' contains
+        pkg=$(echo $pkg | awk -F "/" '{s=s $2 " "} END{print s}') # O/P: pkg
+    fi
     local check=$(jq --arg pkg "$pkg" '.installed|any(.==$pkg)' $PKG_JSON_FILE)
     if [ $check == 'false' ]; then
         jq --arg pkg "$pkg" '.installed += [$pkg]' $PKG_JSON_FILE | sponge $PKG_JSON_FILE
@@ -33,7 +29,12 @@ function add_to_json {
 }
 
 function log_non_installed {
+    # if want O/P: extra/pkg
     local pkg=$1
+    # if want O/P: pkg
+    if [[ "$pkg" =~ ^[a-z]*/ ]]; then # when 'alphabats/' contains
+        pkg=$(echo $pkg | awk -F "/" '{s=s $2 " "} END{print s}') # O/P: pkg
+    fi
     local file="$HOME_TMP_JSON_FILE"
     local new_object=$(printf "%s" "$pkg")
     echo "logged pkg is: $new_object"

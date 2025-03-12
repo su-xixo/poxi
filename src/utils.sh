@@ -16,7 +16,7 @@ ROOT_DIR="$(cd -P "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PKG_JSON_FILE=$ROOT_DIR/packages.json
 HOME_PKG_JSON_FILE="${XDG_DATA_HOME:-$HOME}/poxi/packages.json"
 HOME_TMP_JSON_FILE="$ROOT_DIR/.temp.json"
-PKG_JSON_FILE=$HOME_PKG_JSON_FILE
+# PKG_JSON_FILE=$HOME_PKG_JSON_FILE
 # desktop name
 DESKTOP=$DESKTOP_SESSION
 # check if root
@@ -85,8 +85,6 @@ get_all_packages(){
     | awk '{s = s $1 "/" $2 " "} END {print s}')"
     echo $PKGS
 }
-# --preview 'echo {2} | xargs -ro $POXI_tool -Si --color=always'
-
 
 # get all installed packages name and return selected pkgs in one string
 get_installed_packages() {

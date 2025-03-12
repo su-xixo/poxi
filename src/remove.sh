@@ -7,7 +7,12 @@ source $UTILS
 function log {
     local action=$1
     shift 1
+    # if want O/P: extra/pkg
     local pkg=$1
+    # if want O/P: pkg
+    if [[ "$pkg" =~ ^[a-z]*/ ]]; then # when 'alphabats/' contains
+        pkg=$(echo $pkg | awk -F "/" '{s=s $2 " "} END{print s}') # O/P: pkg
+    fi
     local file="$HOME_TMP_JSON_FILE"
     local new_object=$(printf "%s" "$pkg")
     echo "logged pkg is: $new_object"
