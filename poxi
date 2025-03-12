@@ -1,7 +1,14 @@
 #!/bin/bash
 # COMMAND NAME: POXI
 __VERSION="0.1"
-CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+SOURCE=${BASH_SOURCE[0]}
+while [ -L "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+  DIR=$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )
+  SOURCE=$(readlink "$SOURCE")
+  [[ $SOURCE != /* ]] && SOURCE=$DIR/$SOURCE # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+done
+CURRENT_DIR=$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )
 SCRIPT_DIR="$CURRENT_DIR/src"
 SCRIPT_NAME="$(basename $0)"
 
@@ -129,5 +136,5 @@ function main {
 
 }
 
-# main $@
-main -v
+main $@
+# main -v
