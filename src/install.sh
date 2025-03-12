@@ -37,7 +37,7 @@ function log_non_installed {
     fi
     local file="$HOME_TMP_JSON_FILE"
     local new_object=$(printf "%s" "$pkg")
-    echo "logged pkg is: $new_object"
+    echo -e "logged pkg is: ${COLORS['yellow']}$new_object${COLORS['reset']}"
     if [ ! -f "$file" ] || [ ! -s "$file" ]; then # no file or empty
         echo "{}" > $file
     fi

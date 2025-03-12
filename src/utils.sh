@@ -112,10 +112,10 @@ check_package_installed() {
   package_name=${package_name##*/} # trim longest pattern match O/P: bat
   pacman -Q "$package_name" &>/dev/null  # Suppress output
   if [[ $? -eq 0 ]]; then
-    echo "Package '$package_name' is installed."
+    echo -e "${COLORS['blue']}:: 󱧘 ${COLORS['green']}Package '$package_name' is installed.${COLORS['reset']}"
     return 0 # Return success
   else
-    echo "Package '$package_name' is NOT installed."
+    echo -e "${COLORS['blue']}:: 󱧙 ${COLORS['green']}Package '$package_name' is NOT installed.${COLORS['reset']}"
     return 1 # Return failure
   fi
 }
