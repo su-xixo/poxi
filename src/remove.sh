@@ -8,7 +8,7 @@ function log {
     local action=$1
     shift 1
     local pkg=$1
-    local file=".temp.json"
+    local file="$HOME_TMP_JSON_FILE"
     local new_object=$(printf "%s" "$pkg")
     echo "logged pkg is: $new_object"
     if [ ! -f "$file" ] || [ ! -s "$file" ]; then # no file or empty
