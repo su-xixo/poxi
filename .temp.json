@@ -1,5 +1,6 @@
 {
   "removed": [
-    "bat"
+    "bat",
+    "cowsay"
   ]
 }

@@ -59,40 +59,14 @@ check_json_file(){
     fi
 }
 
-# installation simmulation
-function simmulate_install {
-    for pkg in $@; do
-        POXI_install=$(printf "%s -S --needed %s %s" "$POXI" "$([[ "$ACCEPT_ALL" == "true" ]] && echo "--noconfirm" || echo "")" "$pkg") # pacman -S --needed --noconfirm aur/pkg2
-
-        if [[ $pkg =~ ^(aur\/) ]]; then
-            POXI_install=$(printf "%s -S --needed %s %s" "$AHELPER" "$([[ "$ACCEPT_ALL" == "true" ]] && echo "--noconfirm" || echo "")" "$pkg") # paru -S --needed --noconfirm aur/pkg2
-        fi
-        eval ${POXI_install}
-        echo "$?"
-    done
-}
-
-# remove simmulation
-function simmulate_remove {
-    for pkg in $@; do
-        POXI_remove=$(printf "%s -Rns %s %s" "$POXI" "$([[ "$ACCEPT_ALL" == "true" ]] && echo "--noconfirm" || echo "")" "$pkg") # pacman -Rns --noconfirm aur/pkg2
-
-        if [[ $pkg =~ ^(aur\/) ]]; then
-            POXI_remove=$(printf "%s -Rns %s %s" "$AHELPER" "$([[ "$ACCEPT_ALL" == "true" ]] && echo "--noconfirm" || echo "")" "$pkg") # paru -Rns --noconfirm aur/pkg2
-        fi
-        eval ${POXI_remove}
-        echo "$?"
-    done
-}
-
-## get package information
+# get package information
 get_package_detail() {
     local PKG=$1
     local Preview="$($POXI --color=always -Si $PKG)"
     echo "$Preview"
 }
 
-## get all packages name and return selected pkgs in one string
+# get all packages name and return selected pkgs in one string
 get_all_packages(){
     if test -n "$AHELPER" && test -v AHELPER; then
         local POXI_tool=$AHELPER
@@ -114,7 +88,7 @@ get_all_packages(){
 # --preview 'echo {2} | xargs -ro $POXI_tool -Si --color=always'
 
 
-## get all installed packages name and return selected pkgs in one string
+# get all installed packages name and return selected pkgs in one string
 get_installed_packages() {
     if test -n "$AHELPER" && test -v AHELPER; then
         local POXI_tool=$AHELPER
