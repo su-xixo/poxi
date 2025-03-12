@@ -8,7 +8,7 @@ MAIN_SCRIPT := $(SCRIPT_DIR)/poxi
 UTILS_SCRIPT := $(SRC_DIR)/utils.sh
 
 # Installation details
-PREFIX := /usr/local
+PREFIX := $(HOME)/.local
 BIN_DIR := $(PREFIX)/bin
 SCRIPT_INSTALL_DIR := $(PREFIX)/share/$(SCRIPT_NAME)
 
@@ -29,10 +29,10 @@ help:
 	@echo "  clean         Remove any build artifacts (none in this case)"
 	@echo "  help          Show this help message"
 
-install: check_root check_prerequisites create_install_dir copy_files create_symlink
+install: check_prerequisites create_install_dir copy_files create_symlink
 	@echo "$(SCRIPT_NAME) installed successfully to $(BIN_DIR)"
 
-uninstall: check_root remove_symlink remove_install_dir
+uninstall: remove_symlink remove_install_dir
 	@echo "$(SCRIPT_NAME) uninstalled successfully"
 
 clean:
@@ -65,15 +65,14 @@ copy_files:
 	@echo "Copying files to $(SCRIPT_INSTALL_DIR)"
 	@cp -r $(SRC_DIR) $(SCRIPT_INSTALL_DIR)/
 	@cp $(MAIN_SCRIPT) $(SCRIPT_INSTALL_DIR)/
-	@cp $(SCRIPT_DIR)/packages.json $(SCRIPT_INSTALL_DIR)/
 
 create_symlink:
-	@echo "Creating symlink: $(BIN_DIR)/$(SCRIPT_NAME) -> $(SCRIPT_INSTALL_DIR)/main.sh"
+	@echo "Creating symlink: $(BIN_DIR)/$(SCRIPT_NAME) -> $(SCRIPT_INSTALL_DIR)/poxi"
 	@if [ "$(IS_INSTALLED)" == "yes" ]; then \
         echo "Warning: $(SCRIPT_NAME) is already installed. Overwriting..."; \
 		rm -f $(BIN_DIR)/$(SCRIPT_NAME); \
     fi
-	@ln -s $(SCRIPT_INSTALL_DIR)/main.sh $(BIN_DIR)/$(SCRIPT_NAME)
+	@ln -s $(SCRIPT_INSTALL_DIR)/poxi $(BIN_DIR)/$(SCRIPT_NAME)
 
 remove_symlink:
 	@echo "Removing symlink: $(BIN_DIR)/$(SCRIPT_NAME)"

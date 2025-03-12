@@ -14,7 +14,9 @@ declare -A COLORS=(
 
 ROOT_DIR="$(cd -P "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PKG_JSON_FILE=$ROOT_DIR/packages.json
-HOME_PKG_JSON_FILE="${XDG_DATA_HOME:-$HOME}/base/packages.json"
+HOME_PKG_JSON_FILE="${XDG_DATA_HOME:-$HOME}/poxi/packages.json"
+HOME_TMP_JSON_FILE="$ROOT_DIR/.temp.json"
+PKG_JSON_FILE=$HOME_PKG_JSON_FILE
 # desktop name
 DESKTOP=$DESKTOP_SESSION
 # check if root
@@ -52,9 +54,8 @@ check_json_file(){
         return
     else
         echo "Creating $(basename $PKG_JSON_FILE) file."
-        echo $PKG_JSON_FILE
-        result=$(echo "$data" | jq '.' > $PKG_JSON_FILE) && echo 0 || echo 1
-        echo $result
+        echo "At location: $PKG_JSON_FILE"
+        result=$(echo "$data" | jq '.' > $PKG_JSON_FILE)
     fi
 }
 
