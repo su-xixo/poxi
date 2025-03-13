@@ -150,3 +150,6 @@ function remove {
     esac
     rm -rf "$TEMP_DIR"
 }
+
+# wget -qO- https://raw.githubusercontent.com/su-xixo/poxi/refs/heads/master/install.sh | bash -s install
+# curl -fsSL https://raw.githubusercontent.com/su-xixo/poxi/refs/heads/master/install.sh | bash -s install
