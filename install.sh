@@ -18,10 +18,11 @@ SOURCE_DIR="/usr/local/share/$PKGNAME"
 SOURCE_DIR="$HOME/.local/share/$PKGNAME"
 
 INSTALL_DIR="/usr/local/bin"
+INSTALL_DIR="$HOME/.local/bin"
 TEMP_DIR=$(mktemp -d)
 USER=$(whoami)
 declare -A DEPENDENCIES=(
-    ['base']='curl jq sponge fzf'
+    ['base']='git curl jq moreutils fzf'
     ['aur']='yay paru'
 )
 
@@ -34,6 +35,20 @@ declare -A DEPENDENCIES=(
 function usage {
   echo "Usage: $(basename $0) {install|remove|update}"
   exit 1
+}
+
+function cleanup {
+    local remove_source="$SOURCE_DIR"
+    local remove_install="$INSTALL_DIR/$PKGNAME"
+    if [[ -d $remove_source ]]; then
+        echo -e "${red}${reset} Removing share/poxi folder from ${bold}$remove_source${reset}"
+        rm -rf "$remove_source"
+    fi
+
+    if [[ -L $remove_install ]]; then
+        echo -e "${red}${reset} Removing poxi symlink file from ${bold}$remove_install${reset}"
+        rm -rf "$remove_install"
+    fi
 }
 
 function check_depds {
@@ -60,7 +75,7 @@ function install {
     # 1. check if already installed
     if command -v "$PKGNAME" >/dev/null 2>&1; then
         echo -e "${cyan} package already present${reset}"
-        # exit 1
+        return
     fi
 
     # 2. download package
@@ -69,8 +84,7 @@ function install {
     
     if [[ $? -ne 0 ]]; then
         echo -e "${red} Failed to download script${reset}"
-        rm -rf "$TEMP_DIR"
-        exit 1
+        return
     fi
 
     # 3. install package
@@ -78,24 +92,17 @@ function install {
     if [ ! -d "$SOURCE_DIR" ]; then
         mkdir -p "$SOURCE_DIR"
     fi
-    cp -r "$TEMP_DIR" "$SOURCE_DIR"
-    ln -s $SOURCE_DIR/$PKGNAME/$PKGNAME $INSTALL_DIR/$PKGNAME
+    cp -r "$TEMP_DIR"/* "$SOURCE_DIR"
+    ln -sf $SOURCE_DIR/$PKGNAME $INSTALL_DIR/$PKGNAME
     if [ $? -ne 0 ]; then
-        echo "${red}Warning:${reset} Failed to create symlink."
-        rm -rf "$TEMP_DIR"
-        exit 1
+        echo -e "${red}Warning:${reset} Failed to create symlink."
+        cleanup
+        return
     fi
     echo -e "${green} Script installed successfully to $INSTALL_DIR/$PKGNAME${reset}"
-    rm -rf "$TEMP_DIR"
-
-
 }
 function remove {
-    echo "Removing poxi from $SOURCE_DIR/$PKGNAME"
-    # rm -rf $SOURCE_DIR/$PKGNAME
-
-    echo "Removing poxi symlink from $INSTALL_DIR/$PKGNAME"
-    # rm $INSTALL_DIR/$PKGNAME
+    cleanup
 }
 
 
@@ -115,5 +122,5 @@ function remove {
         usage
         ;;
     esac
-
+    rm -rf "$TEMP_DIR"
 }
