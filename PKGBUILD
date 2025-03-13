@@ -1,7 +1,7 @@
 # Maintainer: Your Name <your.email@example.com>
 pkgname=poxi
-pkgver=0.1.1
-pkgrel=2
+pkgver=0.1.2
+pkgrel=3
 pkgdesc="A package manager helper for Arch Linux"
 arch=('any')
 url="https://github.com/su-xixo/poxi" # Replace with your repo URL
