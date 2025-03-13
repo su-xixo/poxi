@@ -18,8 +18,7 @@ SOURCE_DIR="/usr/local/share/$PKGNAME"
 SOURCE_DIR="$HOME/.local/share/$PKGNAME"
 
 INSTALL_DIR="/usr/local/bin"
-# TEMP_DIR=$(mktemp -d)
-echo $TEMP_DIR
+TEMP_DIR=$(mktemp -d)
 USER=$(whoami)
 declare -A DEPENDENCIES=(
     ['base']='curl jq sponge fzf'
@@ -32,7 +31,10 @@ declare -A DEPENDENCIES=(
 #     exit 1
 # fi
 
-
+function usage {
+  echo "Usage: $(basename $0) {install|remove|update}"
+  exit 1
+}
 
 function check_depds {
     echo -e "${yellow} Checking base dependencies${reset}"
@@ -54,11 +56,13 @@ function check_depds {
 
 # check_depds
 function install {
+    check_depds
     # 1. check if already installed
     if command -v "$PKGNAME" >/dev/null 2>&1; then
         echo -e "${cyan} package already present${reset}"
         # exit 1
     fi
+
     # 2. download package
     echo -e "${yellow} Downloading package...${reset}"
     git clone --branch "$(git ls-remote --tags --sort="v:refname" $URL | tail -n1 | sed 's/.*\///; s/\^{}//')" --single-branch $URL $TEMP_DIR
@@ -68,6 +72,7 @@ function install {
         rm -rf "$TEMP_DIR"
         exit 1
     fi
+
     # 3. install package
     echo -e "${yellow} Installing script...${reset}"
     if [ ! -d "$SOURCE_DIR" ]; then
@@ -75,17 +80,40 @@ function install {
     fi
     cp -r "$TEMP_DIR" "$SOURCE_DIR"
     ln -s $SOURCE_DIR/$PKGNAME/$PKGNAME $INSTALL_DIR/$PKGNAME
+    if [ $? -ne 0 ]; then
+        echo "${red}Warning:${reset} Failed to create symlink."
+        rm -rf "$TEMP_DIR"
+        exit 1
+    fi
     echo -e "${green} Script installed successfully to $INSTALL_DIR/$PKGNAME${reset}"
     rm -rf "$TEMP_DIR"
 
 
 }
 function remove {
-    echo
+    echo "Removing poxi from $SOURCE_DIR/$PKGNAME"
+    # rm -rf $SOURCE_DIR/$PKGNAME
+
+    echo "Removing poxi symlink from $INSTALL_DIR/$PKGNAME"
+    # rm $INSTALL_DIR/$PKGNAME
 }
 
 
 {
-    # check_depds
-    install
+    if [ $# -ne 1 ]; then
+        usage
+    fi
+
+    case "$1" in
+    install)
+        install
+        ;;
+    remove)
+        remove
+        ;;
+    *)
+        usage
+        ;;
+    esac
+
 }
