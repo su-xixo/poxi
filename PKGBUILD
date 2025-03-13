@@ -14,15 +14,25 @@ sha256sums=('SKIP') # Generate checksum and update here
 # backup=('/etc/poxi/packages.json')
 
 package() {
+  cd "$pkgname-$pkgver"
+
+  find . -type f -executable -exec chmod 755 {} \;
+  install -d "${pkgdir}/usr/share/${pkgname}"
+  cp -r * "${pkgdir}/usr/share/${pkgname}"
+  # find "${pkgdir}/usr/share/${pkgname}" -type f -E -exec chmod 755 {} \;
+
   install -d "${pkgdir}/usr/bin"
-  install -Dm755 "poxi.sh" "${pkgdir}/usr/bin/poxi"
+  ln -s "/usr/share/${pkgname}/poxi" "${pkgdir}/usr/bin/${pkgname}"
 
-  install -d "${pkgdir}/usr/share/poxi/src"
-  cp -r src/* "${pkgdir}/usr/share/poxi/src"
+  # install -d "${pkgdir}/usr/bin"
+  # install -Dm755 "poxi.sh" "${pkgdir}/usr/bin/poxi"
 
-  install -d "${pkgdir}/usr/share/poxi"
-  install -Dm644 packages.json "${pkgdir}/usr/share/poxi/packages.json"
+  # install -d "${pkgdir}/usr/share/poxi/src"
+  # cp -r src/* "${pkgdir}/usr/share/poxi/src"
 
-  install -d "${pkgdir}/usr/share/doc/${pkgname}"
-  install -Dm644 README.md "${pkgdir}/usr/share/doc/${pkgname}/README.md" # optional
+  # install -d "${pkgdir}/usr/share/poxi"
+  # install -Dm644 packages.json "${pkgdir}/usr/share/poxi/packages.json"
+
+  # install -d "${pkgdir}/usr/share/doc/${pkgname}"
+  # install -Dm644 README.md "${pkgdir}/usr/share/doc/${pkgname}/README.md" # optional
 }
