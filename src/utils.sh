@@ -16,6 +16,9 @@ ROOT_DIR="$(cd -P "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PKG_JSON_FILE=$ROOT_DIR/packages.json
 HOME_PKG_JSON_FILE="${XDG_DATA_HOME:-$HOME}/poxi/packages.json"
 HOME_TMP_JSON_FILE="${XDG_DATA_HOME:-$HOME}/poxi/.temp.json"
+if [ ! -d "$(dirname $HOME_TMP_JSON_FILE)" ]; then
+    mkdir -p "$(dirname $HOME_TMP_JSON_FILE)"
+fi
 PKG_JSON_FILE=$HOME_PKG_JSON_FILE
 # desktop name
 DESKTOP=$DESKTOP_SESSION
