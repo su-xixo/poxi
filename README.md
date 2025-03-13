@@ -66,6 +66,9 @@ There are multiple ways to install Poxi:
    ```bash
    curl -fsSL https://raw.githubusercontent.com/su-xixo/poxi/refs/heads/master/install.sh | bash -s install
    ```
+   ```bash
+   wget -qO- https://raw.githubusercontent.com/su-xixo/poxi/refs/heads/master/install.sh | bash -s install
+   ```
 
 
 <!-- # Poxi: A Package Manager Helper for Arch Linux
