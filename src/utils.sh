@@ -58,8 +58,9 @@ check_json_file(){
     else
         echo "Creating $(basename $PKG_JSON_FILE) file."
         echo "At location: $PKG_JSON_FILE"
-        local dir_PKG_JSON_FILE="$(dirname $PKG_JSON_FILE)"
-        mkdir -p "${dir_PKG_JSON_FILE}"
+        if [ ! -d "$(dirname $PKG_JSON_FILE)" ]; then
+            mkdir -p "$(dirname $PKG_JSON_FILE)"
+        fi
         result=$(echo "$data" | jq '.' > $PKG_JSON_FILE)
     fi
 }
