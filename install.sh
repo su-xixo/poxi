@@ -21,8 +21,10 @@ INSTALL_DIR="/usr/local/bin"
 INSTALL_DIR="$HOME/.local/bin"
 TEMP_DIR=$(mktemp -d)
 USER=$(whoami)
+
+declare -a MISSING
 declare -A DEPENDENCIES=(
-    ['base']='git curl jq moreutils fzf'
+    ['base']='git curl jq sponge fzf'
     ['aur']='yay paru'
 )
 
@@ -33,7 +35,7 @@ declare -A DEPENDENCIES=(
 # fi
 
 function usage {
-  echo "Usage: $(basename $0) {install|remove|update}"
+  echo "Usage: $(basename $0) {install|remove}"
   exit 1
 }
 
@@ -51,13 +53,24 @@ function cleanup {
     fi
 }
 
+function install_depds {
+    for pkg in "${MISSING[@]}"; do
+        sudo pacman -S --noconfirm $pkg
+    done
+}
+
 function check_depds {
     echo -e "${yellow} Checking base dependencies${reset}"
     for pkg in ${DEPENDENCIES['base']}; do
         if command -v "$pkg" >/dev/null 2>&1;then
             echo -n "    ";echo -e "${bold}${green}${reset} $pkg found" && sleep 0.5
         else
-            echo -n "    ";echo -e "${bold}${red}${reset} $pkg found" && sleep 0.5
+            echo -n "    ";echo -e "${bold}${red}${reset} $pkg notfound" && sleep 0.5
+            if [[ $pkg == 'sponge' ]]; then
+                MISSING+=("$pkg")
+                continue
+            fi
+            MISSING+=("$pkg")
         fi
     done
     echo -e "${yellow} Checking aur dependencies${reset}"
@@ -65,9 +78,17 @@ function check_depds {
         if command -v "$pkg" >/dev/null 2>&1; then
             echo -n "    ";echo -e "${bold}${green}${reset} $pkg found" && sleep 0.5
             break
+        else
+            MISSING+=("$pkg")
         fi
     done
+
+    if [ ${#MISSING[@]} -ne 0 ]; then
+        echo -e "${green}Installing dependencies...${reset}";sleep 0.5
+        install_depds
+    fi
 }
+
 
 # check_depds
 function install {
@@ -80,6 +101,8 @@ function install {
 
     # 2. download package
     echo -e "${yellow} Downloading package...${reset}"
+    local latest_version="$(git ls-remote --tags --sort="v:refname" $URL | tail -n1 | sed 's/.*\///; s/\^{}//')"
+    echo -e "latest version is $latest_version"
     git clone --branch "$(git ls-remote --tags --sort="v:refname" $URL | tail -n1 | sed 's/.*\///; s/\^{}//')" --single-branch $URL $TEMP_DIR
     
     if [[ $? -ne 0 ]]; then
@@ -105,6 +128,9 @@ function remove {
     cleanup
 }
 
+# declare -a my_array
+# echo "${#my_array[@]}"
+# exit 0
 
 {
     if [ $# -ne 1 ]; then
